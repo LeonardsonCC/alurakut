@@ -82,36 +82,6 @@ export default function Home() {
       image: "https://picsum.photos/300/300",
       link: "https://github.com/LeonardsonCC"
     },
-    {
-      id: 8,
-      title: "Comunidade exemplo",
-      image: "https://picsum.photos/300/300",
-      link: "https://github.com/LeonardsonCC"
-    },
-    {
-      id: 8,
-      title: "Comunidade exemplo",
-      image: "https://picsum.photos/300/300",
-      link: "https://github.com/LeonardsonCC"
-    },
-    {
-      id: 8,
-      title: "Comunidade exemplo",
-      image: "https://picsum.photos/300/300",
-      link: "https://github.com/LeonardsonCC"
-    },
-    {
-      id: 8,
-      title: "Comunidade exemplo",
-      image: "https://picsum.photos/300/300",
-      link: "https://github.com/LeonardsonCC"
-    },
-    {
-      id: 8,
-      title: "Comunidade exemplo",
-      image: "https://picsum.photos/300/300",
-      link: "https://github.com/LeonardsonCC"
-    },
   ]);
 
   const [followers, setFollowers] = useState([]);
@@ -129,7 +99,7 @@ export default function Home() {
           image: follower.avatar_url,
           link: follower.url
         }
-      }));
+      }).reverse());
     })
   }, [])
 
