@@ -1,6 +1,6 @@
 import { ProfileRelationsBoxWrapper } from "../ProfileRelations";
 
-const BoxList = ({ list, title }) => {
+const BoxList = ({ list, title, startPath=null }) => {
   const isGreaterThanMax = list.length > 6;
   const renderList = isGreaterThanMax ? list.slice(0, 6) : [...list];
 
@@ -12,7 +12,7 @@ const BoxList = ({ list, title }) => {
       <ul>
         {renderList.map((item) => (
           <li>
-            <a href={item.link} key={item.id} target="_blank">
+            <a href={startPath === null ? item.link : `/${startPath}/${item.id}`} key={item.id} target="_blank">
               <img src={item.image} />
               <span>{item.title}</span>
             </a>

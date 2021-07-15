@@ -31,77 +31,73 @@ function ProfileSidebar({ githubUser }) {
 
 export default function Home() {
   const githubUser = "LeonardsonCC";
-  const [favoritePersons, setFavoritePersons] = useState([
-    {
-      id: 1,
-      title: "LeonardsonCC",
-      image: "https://github.com/LeonardsonCC.png",
-      link: "https://github.com/LeonardsonCC"
-    },
-    {
-      id: 2,
-      title: "LeonardsonCC",
-      image: "http://github.com/LeonardsonCC.png",
-      link: "https://github.com/LeonardsonCC"
-    },
-    {
-      id: 3,
-      title: "LeonardsonCC",
-      image: "http://github.com/LeonardsonCC.png",
-      link: "https://github.com/LeonardsonCC"
-    },
-    {
-      id: 4,
-      title: "LeonardsonCC",
-      image: "http://github.com/LeonardsonCC.png",
-      link: "https://github.com/LeonardsonCC"
-    },
-  ]);
-  const [communities, setCommunities] = useState([
-    {
-      id: 5,
-      title: "Comunidade exemplo",
-      image: "https://picsum.photos/300/300",
-      link: "https://github.com/LeonardsonCC"
-    },
-    {
-      id: 6,
-      title: "Comunidade exemplo",
-      image: "https://picsum.photos/300/300",
-      link: "https://github.com/LeonardsonCC"
-    },
-    {
-      id: 7,
-      title: "Comunidade exemplo",
-      image: "https://picsum.photos/300/300",
-      link: "https://github.com/LeonardsonCC"
-    },
-    {
-      id: 8,
-      title: "Comunidade exemplo",
-      image: "https://picsum.photos/300/300",
-      link: "https://github.com/LeonardsonCC"
-    },
-  ]);
+  const [favoritePersons, setFavoritePersons] = useState([]);
+  const [communities, setCommunities] = useState([]);
 
   const [followers, setFollowers] = useState([]);
-  // 0 - Pegar o array de dados do github 
-  useEffect(function() {
-    fetch('https://api.github.com/users/LeonardsonCC/followers')
-    .then(function (data) {
-      return data.json();
-    })
-    .then(function(data) {
-      setFollowers(data.map(follower => {
-        return {
-          id: follower.id,
-          title: follower.login,
-          image: follower.avatar_url,
-          link: follower.url
+  // 0 - Pegar o array de dados do github
+  useEffect(function () {
+    fetch("https://api.github.com/users/LeonardsonCC/following")
+      .then(function (data) {
+        return data.json();
+      })
+      .then(function (data) {
+        setFavoritePersons(
+          data
+            .map((favoritePerson) => {
+              return {
+                id: favoritePerson.id,
+                title: favoritePerson.login,
+                image: favoritePerson.avatar_url,
+                link: favoritePerson.url,
+              };
+            })
+            .reverse()
+        );
+      });
+    fetch("https://api.github.com/users/LeonardsonCC/followers")
+      .then(function (data) {
+        return data.json();
+      })
+      .then(function (data) {
+        setFollowers(
+          data
+            .map((follower) => {
+              return {
+                id: follower.id,
+                title: follower.login,
+                image: follower.avatar_url,
+                link: follower.url,
+              };
+            })
+            .reverse()
+        );
+      });
+
+    fetch("https://graphql.datocms.com/", {
+      method: "POST",
+      headers: {
+        Authorization: "aee86b6a7e8a8627a2cbea8dd303a4",
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query: `query {
+        allCommunities {
+          id 
+          title
+          image
+          creatorslug
         }
-      }).reverse());
+      }`,
+      }),
     })
-  }, [])
+      .then((response) => response.json()) // Pega o retorno do response.json() e já retorna
+      .then(({ data }) => {
+        const newCommunities = data.allCommunities;
+        setCommunities(newCommunities);
+      });
+  }, []);
 
   const handleCommunityFormSubmit = (event) => {
     event.preventDefault();
@@ -110,12 +106,25 @@ export default function Home() {
     const formData = new FormData(event.target);
 
     let newCommunities = [...communities];
-    newCommunities.push({
+    const community = {
       title: formData.get("title"),
       image: formData.get("image"),
-      link: formData.get("link"),
+      creatorslug: githubUser,
+    };
+    newCommunities.push(community);
+
+    fetch("/api/communities", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(community),
+    }).then(async (response) => {
+      const { newRegister } = await response.json();
+      const community = newRegister;
+      const newCommunities = [...communities, community];
+      setCommunities(newCommunities);
     });
-    setCommunities(newCommunities);
   };
 
   return (
@@ -148,22 +157,18 @@ export default function Home() {
                   aria-label="Coloque uma URL para usarmos de capa"
                 />
               </div>
-              <div>
-                <input
-                  placeholder="Qual o link da sua comunidade?"
-                  name="link"
-                  aria-label="Qual o link da sua comunidade?"
-                  type="text"
-                />
-              </div>
               <button>Criar comunidade</button>
             </form>
           </Box>
         </div>
         <div style={{ gridArea: "profileRelationsArea" }}>
+          <BoxList
+            list={communities}
+            title={"Comunidades"}
+            startPath="communities"
+          />
           <BoxList list={followers} title={"Seguidores"} />
-          <BoxList list={communities} title={"Comunidades"} />
-          <BoxList list={favoritePersons} title={"Pessoas favoritas"} />
+          <BoxList list={favoritePersons} title={"Seguindo"} />
         </div>
       </MainGrid>
     </>
