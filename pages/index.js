@@ -61,25 +61,55 @@ export default function Home() {
     {
       id: 5,
       title: "Comunidade exemplo",
-      image: "http://placehold.it/300x300",
+      image: "https://picsum.photos/300/300",
       link: "https://github.com/LeonardsonCC"
     },
     {
       id: 6,
       title: "Comunidade exemplo",
-      image: "http://placehold.it/300x300",
+      image: "https://picsum.photos/300/300",
       link: "https://github.com/LeonardsonCC"
     },
     {
       id: 7,
       title: "Comunidade exemplo",
-      image: "http://placehold.it/300x300",
+      image: "https://picsum.photos/300/300",
       link: "https://github.com/LeonardsonCC"
     },
     {
       id: 8,
       title: "Comunidade exemplo",
-      image: "http://placehold.it/300x300",
+      image: "https://picsum.photos/300/300",
+      link: "https://github.com/LeonardsonCC"
+    },
+    {
+      id: 8,
+      title: "Comunidade exemplo",
+      image: "https://picsum.photos/300/300",
+      link: "https://github.com/LeonardsonCC"
+    },
+    {
+      id: 8,
+      title: "Comunidade exemplo",
+      image: "https://picsum.photos/300/300",
+      link: "https://github.com/LeonardsonCC"
+    },
+    {
+      id: 8,
+      title: "Comunidade exemplo",
+      image: "https://picsum.photos/300/300",
+      link: "https://github.com/LeonardsonCC"
+    },
+    {
+      id: 8,
+      title: "Comunidade exemplo",
+      image: "https://picsum.photos/300/300",
+      link: "https://github.com/LeonardsonCC"
+    },
+    {
+      id: 8,
+      title: "Comunidade exemplo",
+      image: "https://picsum.photos/300/300",
       link: "https://github.com/LeonardsonCC"
     },
   ]);
