@@ -5,7 +5,7 @@ import {
   AlurakutProfileSidebarMenuDefault,
   OrkutNostalgicIconSet,
 } from "../src/lib/AlurakutCommon";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BoxList from "../src/components/BoxList";
 
 function ProfileSidebar({ githubUser }) {
@@ -114,6 +114,25 @@ export default function Home() {
     },
   ]);
 
+  const [followers, setFollowers] = useState([]);
+  // 0 - Pegar o array de dados do github 
+  useEffect(function() {
+    fetch('https://api.github.com/users/LeonardsonCC/followers')
+    .then(function (data) {
+      return data.json();
+    })
+    .then(function(data) {
+      setFollowers(data.map(follower => {
+        return {
+          id: follower.id,
+          title: follower.login,
+          image: follower.avatar_url,
+          link: follower.url
+        }
+      }));
+    })
+  }, [])
+
   const handleCommunityFormSubmit = (event) => {
     event.preventDefault();
     console.log(event);
@@ -172,6 +191,7 @@ export default function Home() {
           </Box>
         </div>
         <div style={{ gridArea: "profileRelationsArea" }}>
+          <BoxList list={followers} title={"Seguidores"} />
           <BoxList list={communities} title={"Comunidades"} />
           <BoxList list={favoritePersons} title={"Pessoas favoritas"} />
         </div>
