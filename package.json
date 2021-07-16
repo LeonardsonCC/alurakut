@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "DATO_WRITE_KEY=bbb1d3dd7cac75f0f869674f9486ed next",
+    "dev": "next",
     "build": "next build",
     "start": "next start"
   },
