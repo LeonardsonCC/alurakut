@@ -422,7 +422,7 @@ const AlurakutLoginScreen = css`
           text-decoration: none;
           color: var(--colorPrimary);
         }
-        input {
+        input, textarea {
           width: 100%;
           display: block;
           border: 1px solid var(--textQuarternaryColor);
@@ -491,7 +491,7 @@ export const AlurakutStyles = css`
       opacity: .5;
     }
   }
-  input {
+  input, textarea {
     transition: .3s;
     outline: 0;
     &:disabled {

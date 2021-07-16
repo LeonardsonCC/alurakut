@@ -7,6 +7,7 @@ import {
 } from "../src/lib/AlurakutCommon";
 import { useState, useEffect } from "react";
 import BoxList from "../src/components/BoxList";
+import Posts from "../src/components/Posts";
 
 function ProfileSidebar({ githubUser }) {
   return (
@@ -33,9 +34,9 @@ export default function Home() {
   const githubUser = "LeonardsonCC";
   const [favoritePersons, setFavoritePersons] = useState([]);
   const [communities, setCommunities] = useState([]);
-
   const [followers, setFollowers] = useState([]);
-  // 0 - Pegar o array de dados do github
+  const [posts, setPosts] = useState([]);
+
   useEffect(function () {
     fetch("https://api.github.com/users/LeonardsonCC/following")
       .then(function (data) {
@@ -97,11 +98,34 @@ export default function Home() {
         const newCommunities = data.allCommunities;
         setCommunities(newCommunities);
       });
+
+    fetch("https://graphql.datocms.com/", {
+      method: "POST",
+      headers: {
+        Authorization: "aee86b6a7e8a8627a2cbea8dd303a4",
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query: `query {
+        allPosts {
+          id 
+          text
+          creatorslug,
+          createdAt
+        }
+      }`,
+      }),
+    })
+      .then((response) => response.json()) // Pega o retorno do response.json() e já retorna
+      .then(({ data }) => {
+        const newPosts = data.allPosts;
+        setPosts(newPosts);
+      });
   }, []);
 
   const handleCommunityFormSubmit = (event) => {
     event.preventDefault();
-    console.log(event);
 
     const formData = new FormData(event.target);
 
@@ -122,10 +146,37 @@ export default function Home() {
     }).then(async (response) => {
       const { newRegister } = await response.json();
       const community = newRegister;
-      const newCommunities = [...communities, community];
+      const newCommunities = [community, ...communities];
       setCommunities(newCommunities);
     });
   };
+
+  const handlePostFormSubmit = (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+
+    let newPosts = [...posts];
+    const post = {
+      text: formData.get("text"),
+      creatorslug: githubUser,
+    };
+    newPosts.push(post);
+
+    fetch("/api/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(post),
+    }).then(async (response) => {
+      const { newRegister } = await response.json();
+      const post = newRegister;
+      const newPosts = [post, ...posts];
+      setPosts(newPosts);
+    });
+
+  }
 
   return (
     <>
@@ -140,7 +191,7 @@ export default function Home() {
             <OrkutNostalgicIconSet />
           </Box>
           <Box>
-            <h2 className="subTitle">O que você deseja fazer?</h2>
+            <h2 className="subTitle">Criar comunidade</h2>
             <form onSubmit={handleCommunityFormSubmit}>
               <div>
                 <input
@@ -157,8 +208,26 @@ export default function Home() {
                   aria-label="Coloque uma URL para usarmos de capa"
                 />
               </div>
-              <button>Criar comunidade</button>
+              <button>Criar</button>
             </form>
+          </Box>
+          <Box>
+            <h2 className="subTitle">Nova postagem</h2>
+            <form onSubmit={handlePostFormSubmit}>
+              <div>
+                <textarea
+                  placeholder="Texto da sua postagem"
+                  name="text"
+                  aria-label="Texto da sua postagem"
+                  rows={3}
+                ></textarea>
+              </div>
+              <button>Criar</button>
+            </form>
+          </Box>
+          <Box>
+            <h2 className="subTitle">Postagens</h2>
+            <Posts list={posts} />
           </Box>
         </div>
         <div style={{ gridArea: "profileRelationsArea" }}>

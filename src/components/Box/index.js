@@ -35,14 +35,15 @@ const Box = styled.div`
     border-color: transparent;
     border-bottom-color: #ecf2fa;
   }
-  input {
+  input, textarea {
+    resize: vertical;
     width: 100%;
     background-color: #f4f4f4;
     color: #333333;
     border: 0;
     padding: 14px 16px;
     margin-bottom: 14px;
-    border-radius: 10000px;
+    border-radius: 25px;
     ::placeholder {
       color: #333333;
       opacity: 1;
