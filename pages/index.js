@@ -32,6 +32,7 @@ function ProfileSidebar({ githubUser }) {
 
 export default function Home() {
   const githubUser = "LeonardsonCC";
+  const [activeForm, setActiveForm] = useState("post");
   const [favoritePersons, setFavoritePersons] = useState([]);
   const [communities, setCommunities] = useState([]);
   const [followers, setFollowers] = useState([]);
@@ -191,39 +192,51 @@ export default function Home() {
             <OrkutNostalgicIconSet />
           </Box>
           <Box>
-            <h2 className="subTitle">Criar comunidade</h2>
-            <form onSubmit={handleCommunityFormSubmit}>
-              <div>
-                <input
-                  placeholder="Qual vai ser o nome da sua comunidade?"
-                  name="title"
-                  aria-label="Qual vai ser o nome da sua comunidade?"
-                  type="text"
-                />
-              </div>
-              <div>
-                <input
-                  placeholder="Coloque uma URL para usarmos de capa"
-                  name="image"
-                  aria-label="Coloque uma URL para usarmos de capa"
-                />
-              </div>
-              <button>Criar</button>
-            </form>
-          </Box>
-          <Box>
-            <h2 className="subTitle">Nova postagem</h2>
-            <form onSubmit={handlePostFormSubmit}>
-              <div>
-                <textarea
-                  placeholder="Texto da sua postagem"
-                  name="text"
-                  aria-label="Texto da sua postagem"
-                  rows={3}
-                ></textarea>
-              </div>
-              <button>Criar</button>
-            </form>
+            <div>
+              <button 
+                style={{margin: "0px 10px 10px 0px", backgroundColor: activeForm == "post" ? "#103663" : "#6f92bb"}} 
+                onClick={() => setActiveForm("post")}>Criar post</button>
+              <button 
+                style={{margin: "0px 10px 10px 0px", backgroundColor: activeForm == "community" ? "#103663" : "#6f92bb"}} 
+                onClick={() => setActiveForm("community")}>Criar comunidade</button>
+            </div>
+
+            {activeForm == "community" ?
+              (<div className="boxForm">
+                <form onSubmit={handleCommunityFormSubmit}>
+                  <div>
+                    <input
+                      placeholder="Qual vai ser o nome da sua comunidade?"
+                      name="title"
+                      aria-label="Qual vai ser o nome da sua comunidade?"
+                      type="text"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      placeholder="Coloque uma URL para usarmos de capa"
+                      name="image"
+                      aria-label="Coloque uma URL para usarmos de capa"
+                    />
+                  </div>
+                  <button>Criar</button>
+                </form>
+              </div>) : (
+                <div className="boxForm">
+                  <form onSubmit={handlePostFormSubmit}>
+                    <div>
+                      <textarea
+                        placeholder="Texto da sua postagem"
+                        name="text"
+                        aria-label="Texto da sua postagem"
+                        rows={3}
+                      ></textarea>
+                    </div>
+                    <button>Criar</button>
+                  </form>
+                </div>
+              )
+            }
           </Box>
           <Box>
             <h2 className="subTitle">Postagens</h2>
